@@ -73,6 +73,10 @@ public class Targeting : UI
 		} else if (RectTransformUtility.RectangleContainsScreenPoint (ActionBars.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			return false;
 		} else if (RectTransformUtility.RectangleContainsScreenPoint (PlayerTarget.GetComponent<RectTransform> (), Input.mousePosition, null)) {
+			Target = Player;
+			friendlyName.text = Player.name;
+			EnemyTarget.SetActive (false);
+			FriendlyTarget.SetActive (true);
 			return false;
 		} else {
 			return true;
@@ -81,12 +85,15 @@ public class Targeting : UI
 
 	float GetRange (Transform target)
 	{
-		
-		Vector3 closestPoint = target.GetComponent<Collider> ().ClosestPointOnBounds (Player.transform.position);
 
-		float distance = Vector3.Distance (closestPoint, Player.transform.position);
+		if (target != PlayerTarget.transform) {
+			Vector3 closestPoint = target.GetComponent<Collider> ().ClosestPointOnBounds (Player.transform.position);
 
-		return distance;
+			float distance = Vector3.Distance (closestPoint, Player.transform.position);
+
+			return distance;
+		} else
+			return 0f;
 	}
 
 	IEnumerator UpdateRangeToTarget ()
@@ -96,13 +103,10 @@ public class Targeting : UI
 
 			if (Target != null) {
 				Range = GetRange (Target.transform);
-				//print (Range);
 			} else
 				Range = Mathf.Infinity;
 
-
 			yield return new WaitForSeconds (0.1f);
-			print (BarOne.name);
 		}
 	}
 }

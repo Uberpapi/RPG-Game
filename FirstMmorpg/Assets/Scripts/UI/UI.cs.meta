@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d7c2e9706ec684a478a751736b577a38
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - barOne: {fileID: 1481083949670596, guid: 4565723728f3ce64089038a08d503db8, type: 2}
+  - barTwo: {fileID: 1361259582034850, guid: 25b9cc61071544e45bbc327ad296c2ae, type: 2}
+  - barThree: {fileID: 1169216065913776, guid: 60831be260a260a4c9094240fb8bad5d, type: 2}
+  - barFour: {fileID: 1816405961523572, guid: 0ff45584116620241bdc109ae68eee11, type: 2}
+  - barFive: {fileID: 1977113475704182, guid: bacffd0d897c48244831901ef9086d5e, type: 2}
+  - barSix: {fileID: 1667200641721176, guid: 91f4022dbc2b94c4484b12bc5ce82102, type: 2}
+  - barSeven: {fileID: 1144151150237786, guid: cf8e74d4c1b861243bf48f0bfbf2aa37, type: 2}
+  - settingsBar: {fileID: 1749130678467350, guid: 9cb6aa68b44965d4883d12bf4add4871,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -7,7 +7,7 @@ public class BaseController : MonoBehaviour
 	[System.NonSerialized]
 	public CharacterController player;
 	[System.NonSerialized]
-	public PlayerBehaviour myBehaviour;
+	public BaseBehaviour myBehaviour;
 	[System.NonSerialized]
 	public Animator animator;
 
@@ -15,7 +15,7 @@ public class BaseController : MonoBehaviour
 	void Start ()
 	{
 		player = GetComponent<CharacterController> ();
-		myBehaviour = GetComponent<PlayerBehaviour> ();
+		myBehaviour = GetComponent<BaseBehaviour> ();
 		animator = GetComponent<Animator> ();
 	}
 	

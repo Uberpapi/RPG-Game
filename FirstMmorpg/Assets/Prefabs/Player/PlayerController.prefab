@@ -1019,8 +1019,9 @@ GameObject:
   - component: {fileID: 4019939724695478}
   - component: {fileID: 95518004409824052}
   - component: {fileID: 143513623092869172}
-  - component: {fileID: 114804303663271060}
   - component: {fileID: 114978704303845890}
+  - component: {fileID: 114204593360465420}
+  - component: {fileID: 114630084027661716}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1195,7 +1196,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1907566675204212}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.015014648, y: -3.8775, z: 0.090026855}
+  m_LocalPosition: {x: -0.015014648, y: -3.8775, z: 7.46}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4990209049703606}
@@ -3087,7 +3088,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114804303663271060
+--- !u!114 &114204593360465420
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3095,15 +3096,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1907566675204212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa1f44d9c84509644894c4cd9066959d, type: 3}
+  m_Script: {fileID: 11500000, guid: c99e9001edad4194782ac4a4663f0819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitpoint: 1000
-  maxHitPoint: 1000
-  baseDamage: 15
+--- !u!114 &114630084027661716
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1907566675204212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f626e2fc787f01a40969751cc576e948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energySlider: {fileID: 0}
+  healthSlider: {fileID: 0}
+  playerClass: 0
+  hitpoint: 10
+  maxHitPoint: 100
+  mana: 10
+  maxMana: 100
+  energyReg: 10
+  energy: 100
+  maxEnergy: 100
+  baseDamage: 1
   attackRange: 1
-  attackSpeed: 0.5
-  hpReg: 1
+  attackSpeed: 1
+  hpReg: 0
 --- !u!114 &114978704303845890
 MonoBehaviour:
   m_ObjectHideFlags: 1

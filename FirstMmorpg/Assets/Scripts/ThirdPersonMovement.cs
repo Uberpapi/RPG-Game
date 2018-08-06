@@ -7,7 +7,7 @@ public class ThirdPersonMovement : MonoBehaviour
 {
 
 	CharacterController player;
-	PlayerBehaviour myBehaviour;
+	BaseBehaviour myBehaviour;
 	Animator animator;
 
 	public Transform centerPoint, myCamera;
@@ -31,7 +31,7 @@ public class ThirdPersonMovement : MonoBehaviour
 	void Start ()
 	{
 		player = transform.GetComponent<CharacterController> ();
-		myBehaviour = transform.GetComponent<PlayerBehaviour> ();
+		myBehaviour = transform.GetComponent<BaseBehaviour> ();
 		animator = transform.GetComponent<Animator> ();
 		//Initiate variables
 		zoom = -12f;

@@ -26,7 +26,6 @@ public class ThirdPersonMovement : MonoBehaviour
     private bool isJumping = false;
     private bool runningForward = false;
     private bool mousePressed = false;
-
     // Use this for initialization
     void Start()
     {
@@ -44,19 +43,8 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         time -= Time.deltaTime;
         Moving();
-        AnimationControl();
-    }
-
-    void FixedUpdate()
-    {
-
-        if (Input.GetButton("Jump"))
-        {
-            isJumping = true;
-
-        }
-
         Gravity();
+        AnimationControl();
     }
 
 
@@ -92,7 +80,7 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             if (!isJumping)
             {
-                vertVelocity = Physics.gravity.y;
+                vertVelocity = (Physics.gravity.y * Time.deltaTime);
             }
             else
             {
@@ -173,6 +161,11 @@ public class ThirdPersonMovement : MonoBehaviour
             runningForward = true;
         }
 
+        if (Input.GetButton("Jump"))
+        {
+            isJumping = true;
+        }
+
         Vector3 movement = new Vector3(moveLR, vertVelocity, moveFB);
         movement = (transform.rotation * movement);
         player.Move(movement * Time.deltaTime);
@@ -188,8 +181,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         if (Physics.Linecast(transform.position + new Vector3(0, 1, 0), myCamera.position, out hit, layerMask))
         {
-			print(hit.transform.name);
-            myCamera.position = new Vector3(hit.point.x, myCamera.position.y, hit.point.z) + myCamera.forward*2;
+            myCamera.position = new Vector3(hit.point.x, myCamera.position.y, hit.point.z) + myCamera.forward * 2;
         }
     }
 }

@@ -21,16 +21,18 @@ public class BaseBehaviour : BaseController
 
 	public void StartRoutines ()
 	{
-		hitpoint = MaxHitpoint;
+		Hitpoint = MaxHitpoint;
 		StartCoroutine (HitpointRegen ());
 		StartCoroutine (UpdateHealthBar ());
 		StartCoroutine (UpdateEnergyBar ());
 		StartCoroutine (ManaRegen ());
 	}
-	// Update is called once per frame
-	void Update ()
-	{
 
+	public void StartEnemyRoutines ()
+	{
+		Hitpoint = MaxHitpoint;
+		StartCoroutine (HitpointRegen ());
+		//StartCoroutine (UpdateHealthBar ());
 	}
 
 	protected int level = 1;
@@ -136,11 +138,19 @@ public class BaseBehaviour : BaseController
 	}
 
 	[SerializeField]
-	protected float attackSpeed = 1;
+	protected float attackSpeed = 1.5f;
 
 	public float AttackSpeed {
 		set { attackSpeed = value; }
 		get { return attackSpeed; }
+	}
+
+	[SerializeField]
+	protected float offHandAttackSpeed = 1.5f;
+
+	public float OffHandAttackSpeed {
+		get { return offHandAttackSpeed; }
+		set { offHandAttackSpeed = value; }
 	}
 
 	[SerializeField]
@@ -164,6 +174,64 @@ public class BaseBehaviour : BaseController
 		get { return myBuffs; }
 		set { myBuffs = value; }
 	}
+
+	protected Buffs myDebuffs = new Buffs ();
+
+	public Buffs MyDebuffs {
+		get { return myDebuffs; }
+		set { myDebuffs = value; }
+	}
+
+	protected float timerOne;
+
+	public float TimerOne {
+		get { return timerOne; }
+		set { timerOne = value; }
+	}
+
+	protected float timerTwo;
+
+	public float TimerTwo {
+		get { return timerTwo; }
+		set { timerTwo = value; }
+	}
+
+	public void ApplyDamage (float amount, GameObject attacker)
+	{
+
+		Hitpoint -= amount;
+
+		if (Hitpoint < 0) {
+			if (tag == "Player")
+				OnPlayerDeath (attacker);
+			else
+				OnNPCDeath (attacker);
+		}
+
+	}
+
+	public void ApplyHeal (float amount, GameObject attacker)
+	{
+
+		Hitpoint += amount;
+
+	}
+
+	void OnPlayerDeath (GameObject attacker)
+	{
+
+		print (attacker.name + " killed you. Resetting heatlh ");
+		Hitpoint = MaxHitpoint;
+
+	}
+
+	void OnNPCDeath (GameObject attacker)
+	{
+		attacker.GetComponent<PlayerBehaviour> ().UpdateExperince (GetComponent<EnemyBehaviour> ().Experience);
+		Destroy (gameObject);
+		print ("Killed it, high five!");
+	}
+
 
 	IEnumerator HitpointRegen ()
 	{
@@ -212,7 +280,7 @@ public class BaseBehaviour : BaseController
 			
 			healthSlider.maxValue = MaxHitpoint;
 			healthSlider.value = Hitpoint;
-			yield return new WaitForSeconds (1f);
+			yield return new WaitForSeconds (0.2f);
 
 		}
 	}

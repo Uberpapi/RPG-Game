@@ -6,7 +6,12 @@ using UnityEngine.UI;
 public class Targeting : UI
 {
 	public Camera playerCamera;
+	public Slider targetEnemyHealthSlider;
+	public Slider targetEnemyManaSlider;
+	public Slider targetFriendlyHealthSlider;
+	public Slider targetFriendlyManaSlider;
 
+	BasicCombat playerCombat;
 	Sprite targetPortrait;
 	Sprite friendlyPortrait;
 	Text targetName;
@@ -26,15 +31,18 @@ public class Targeting : UI
 	// Use this for initialization
 	void Start ()
 	{
-		targetPortrait = GameObject.Find ("TargetPortrait").GetComponent<Image> ().sprite;
-		friendlyPortrait = GameObject.Find ("FriendlyPortraitPicture").GetComponent<Image> ().sprite;
-		targetName = GameObject.Find ("TargetName").GetComponent<Text> ();
+		
+		targetPortrait = GameObject.Find ("EnemyTargetPortrait").GetComponent<Image> ().sprite;
+		friendlyPortrait = GameObject.Find ("FriendlyTargetPortrait").GetComponent<Image> ().sprite;
+		targetName = GameObject.Find ("EnemyName").GetComponent<Text> ();
 		friendlyName = GameObject.Find ("FriendlyName").GetComponent<Text> ();
 		MyCamera = playerCamera;
-
-		StartCoroutine (UpdateRangeToTarget ());
 		Initiate ();
+		StartCoroutine (UpdateRangeToTarget ());
+
+		playerCombat = Player.GetComponent<BasicCombat> ();
 		playerCollider = Player.GetComponent<Collider> ();
+		StartCoroutine (LooseTarget ());
 	}
 
 	void Update ()
@@ -45,20 +53,26 @@ public class Targeting : UI
 			if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
 				if (hit.transform.tag == "Enemy") {
 					Target = hit.transform.gameObject;
-					FriendlyTarget.SetActive (false);
-					EnemyTarget.SetActive (true);
+					FriendlyTargetFrame.SetActive (false);
+					EnemyTargetFrame.SetActive (true);
+					EnemyBehaviour = hit.transform.GetComponent<EnemyBehaviour> ();
 					// targetPortrait = hit.transform.GetComponent<Image> ().sprite;
 					targetName.text = hit.transform.name;
-				} else if (hit.transform.tag == "Player") {
+					StartCoroutine (UpdateEnemyHealthBar ());
+				} else if (hit.transform.tag == "Player" && hit.transform.gameObject != Player) {
 					Target = hit.transform.gameObject;
-					EnemyTarget.SetActive (false);
-					FriendlyTarget.SetActive (true);
+					EnemyTargetFrame.SetActive (false);
+					FriendlyTargetFrame.SetActive (true);
+					PlayerBehaviour = hit.transform.GetComponent<PlayerBehaviour> ();
 					//friendlyPortrait = hit.transform.GetComponent<Image> ().sprite;
 					friendlyName.text = hit.transform.name;
+					StartCoroutine (UpdateFriendlyHealthBar ());
 				} else if (UIHitOrNot ()) {
 					Target = null;
-					EnemyTarget.SetActive (false);
-					FriendlyTarget.SetActive (false);
+					EnemyTargetFrame.SetActive (false);
+					FriendlyTargetFrame.SetActive (false);
+					StopCoroutine (UpdateFriendlyHealthBar ());
+					StopCoroutine (UpdateEnemyHealthBar ());
 				}
 			}
 		}
@@ -66,17 +80,17 @@ public class Targeting : UI
 
 	bool UIHitOrNot ()
 	{
-		if (RectTransformUtility.RectangleContainsScreenPoint (EnemyTarget.GetComponent<RectTransform> (), Input.mousePosition, null)) {
+		if (RectTransformUtility.RectangleContainsScreenPoint (EnemyTargetFrame.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			return false;
-		} else if (RectTransformUtility.RectangleContainsScreenPoint (FriendlyTarget.GetComponent<RectTransform> (), Input.mousePosition, null)) {
+		} else if (RectTransformUtility.RectangleContainsScreenPoint (FriendlyTargetFrame.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			return false;
 		} else if (RectTransformUtility.RectangleContainsScreenPoint (ActionBars.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			return false;
-		} else if (RectTransformUtility.RectangleContainsScreenPoint (PlayerTarget.GetComponent<RectTransform> (), Input.mousePosition, null)) {
+		} else if (RectTransformUtility.RectangleContainsScreenPoint (PlayerTargetFrame.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			Target = Player;
 			friendlyName.text = Player.name;
-			EnemyTarget.SetActive (false);
-			FriendlyTarget.SetActive (true);
+			EnemyTargetFrame.SetActive (false);
+			FriendlyTargetFrame.SetActive (true);
 			return false;
 		} else {
 			return true;
@@ -86,7 +100,7 @@ public class Targeting : UI
 	float GetRange (Transform target)
 	{
 
-		if (target != PlayerTarget.transform) {
+		if (target != PlayerTargetFrame.transform) {
 			Vector3 closestPoint = target.GetComponent<Collider> ().ClosestPointOnBounds (Player.transform.position);
 
 			float distance = Vector3.Distance (closestPoint, Player.transform.position);
@@ -106,7 +120,48 @@ public class Targeting : UI
 			} else
 				Range = Mathf.Infinity;
 
-			yield return new WaitForSeconds (0.1f);
+			yield return new WaitForSeconds (0.2f);
+		}
+	}
+
+	IEnumerator UpdateEnemyHealthBar ()
+	{
+
+		while (true && EnemyBehaviour != null) {
+
+			targetEnemyHealthSlider.maxValue = EnemyBehaviour.MaxHitpoint;
+			targetEnemyHealthSlider.value = EnemyBehaviour.Hitpoint;
+
+			yield return new WaitForSeconds (0.2f);
+		}
+
+	}
+
+	IEnumerator UpdateFriendlyHealthBar ()
+	{
+
+		while (true && PlayerBehaviour != null) {
+
+			targetFriendlyHealthSlider.maxValue = PlayerBehaviour.MaxHitpoint;
+			targetFriendlyHealthSlider.value = PlayerBehaviour.Hitpoint;
+
+			yield return new WaitForSeconds (0.2f);
+
+		}
+
+	}
+
+	IEnumerator LooseTarget ()
+	{
+		while (true) {
+			if (Target == null) {
+				FriendlyTargetFrame.SetActive (false);
+				EnemyTargetFrame.SetActive (false);
+				StopCoroutine (UpdateFriendlyHealthBar ());
+				StopCoroutine (UpdateEnemyHealthBar ());
+			}
+
+			yield return new WaitForSeconds (0.4f);
 		}
 	}
 }

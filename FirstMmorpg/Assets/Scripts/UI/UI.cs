@@ -7,15 +7,16 @@ public class UI : MonoBehaviour
 
 	public void Initiate ()
 	{
-		EnemyTarget = GameObject.Find ("EnemyFrame");
-		FriendlyTarget = GameObject.Find ("FriendlyFrame");
-		PlayerTarget = GameObject.Find ("PlayerFrame");
+		EnemyTargetFrame = GameObject.Find ("EnemyFrame");
+		FriendlyTargetFrame = GameObject.Find ("FriendlyFrame");
+		PlayerTargetFrame = GameObject.Find ("PlayerFrame");
 		Player = GameObject.Find ("Player");
+		ActionBars = GameObject.Find ("ActionBars");
 
-		FindBars ();
+		//FindBars ();
 
-		EnemyTarget.SetActive (false);
-		FriendlyTarget.SetActive (false);
+		EnemyTargetFrame.SetActive (false);
+		FriendlyTargetFrame.SetActive (false);
 	}
 
 
@@ -26,25 +27,25 @@ public class UI : MonoBehaviour
 		set { actionBars = value; }
 	}
 
-	protected GameObject enemyTarget;
+	protected GameObject enemyTargetFrame;
 
-	public GameObject EnemyTarget {
-		get { return enemyTarget; }
-		set { enemyTarget = value; }
+	public GameObject EnemyTargetFrame {
+		get { return enemyTargetFrame; }
+		set { enemyTargetFrame = value; }
 	}
 
-	protected GameObject friendlyTarget;
+	protected GameObject friendlyTargetFrame;
 
-	public GameObject FriendlyTarget {
-		get { return friendlyTarget; }
-		set { friendlyTarget = value; }
+	public GameObject FriendlyTargetFrame {
+		get { return friendlyTargetFrame; }
+		set { friendlyTargetFrame = value; }
 	}
 
-	protected GameObject playerTarget;
+	protected GameObject playerTargetFrame;
 
-	public GameObject PlayerTarget {
-		get { return playerTarget; }
-		set { playerTarget = value; }
+	public GameObject PlayerTargetFrame {
+		get { return playerTargetFrame; }
+		set { playerTargetFrame = value; }
 	}
 
 	protected GameObject player;
@@ -124,7 +125,23 @@ public class UI : MonoBehaviour
 		set { settingsBar = value; }
 	}
 
-	void FindBars ()
+	protected PlayerBehaviour playerBehaviour;
+
+	public PlayerBehaviour PlayerBehaviour {
+		get { return playerBehaviour; }
+		set { playerBehaviour = value; }
+	}
+
+	protected EnemyBehaviour enemyBehaviour;
+
+	public EnemyBehaviour EnemyBehaviour {
+		get { return enemyBehaviour; }
+		set { enemyBehaviour = value; }
+	}
+
+
+
+	public void FindBars ()
 	{
 		ActionBars = GameObject.Find ("ActionBars");
 		BarOne = GameObject.Find ("Bar1");

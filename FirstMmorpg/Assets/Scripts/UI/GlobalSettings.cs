@@ -9,12 +9,15 @@ public class GlobalSettings : UI
 	public Texture2D cursorTexture;
 	public CursorMode cursorMode = CursorMode.Auto;
 
+
+
 	Text fps;
 	float time;
 	int counter = 0;
 
 	void Start ()
 	{
+		FindBars ();
 		Cursor.SetCursor (cursorTexture, Vector2.zero, cursorMode);
 		fps = GameObject.Find ("FPSCounter").GetComponent<Text> ();
 	}
@@ -22,6 +25,7 @@ public class GlobalSettings : UI
 	void Update ()
 	{
 		Fps ();
+		PressedButtons ();
 	}
 
 	void Fps ()
@@ -35,5 +39,13 @@ public class GlobalSettings : UI
 			counter = 0;
 		} else
 			counter++;
+	}
+
+	void PressedButtons ()
+	{
+
+		if (Input.GetButtonDown ("One"))
+			BarOne.GetComponent<Button> ().onClick.Invoke ();
+
 	}
 }

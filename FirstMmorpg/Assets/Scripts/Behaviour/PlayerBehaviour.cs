@@ -11,7 +11,6 @@ public class PlayerBehaviour : BaseBehaviour
 	void Start ()
 	{
 		StartRoutines ();
-		print (Experience);
 		expSlider.maxValue = ExpToNextLevel;
 		expSlider.value = Experience;
 	}
@@ -24,8 +23,10 @@ public class PlayerBehaviour : BaseBehaviour
 	protected int expToNextLevel = 400;
 
 	public int ExpToNextLevel {
+		
 		get { return expToNextLevel; }
 		set { expToNextLevel = value; }
+
 	}
 
 	protected int experience = 42;

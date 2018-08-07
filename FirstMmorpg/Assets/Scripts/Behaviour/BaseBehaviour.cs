@@ -18,11 +18,26 @@ public class BaseBehaviour : BaseController
 		StartCoroutine (UpdateEnergyBar ());
 		StartCoroutine (ManaRegen ());
 	}
-	
+
+	public void StartRoutines ()
+	{
+		hitpoint = MaxHitpoint;
+		StartCoroutine (HitpointRegen ());
+		StartCoroutine (UpdateHealthBar ());
+		StartCoroutine (UpdateEnergyBar ());
+		StartCoroutine (ManaRegen ());
+	}
 	// Update is called once per frame
 	void Update ()
 	{
 
+	}
+
+	protected int level = 1;
+
+	public int Level {
+		get { return level; }
+		set { level = value; }
 	}
 
 	[SerializeField]
@@ -180,7 +195,6 @@ public class BaseBehaviour : BaseController
 	{
 
 		while (true) {
-			print (Energy);
 			
 			if (Energy < MaxEnergy)
 				Energy += 10;

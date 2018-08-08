@@ -80,8 +80,9 @@ public class BasicCombat : MonoBehaviour
 			if (FacingTarget ()) {
 				//int number = Random.Range (1, 3);
 				animator.SetTrigger ("strike1");
-				if (Targets.EnemyBehaviour != null)
-					Targets.EnemyBehaviour.ApplyDamage (PlayerBehaviour.BaseDamage, gameObject);
+				if (Targets.EnemyBehaviour != null) {
+					Targets.EnemyBehaviour.ApplyDamage (PlayerBehaviour.BaseDamageMin, PlayerBehaviour.BaseDamageMax, PlayerBehaviour.CritChance, gameObject, false);
+				}
 				autoAttackTimer = 0f;
 			} else {
 				print ("Not facing Target");
@@ -109,10 +110,5 @@ public class BasicCombat : MonoBehaviour
 			Range = targets.Range;
 			yield return new WaitForSeconds (0.2f);
 		}
-	}
-
-	public void TestPrint ()
-	{
-		print ("Button pressed");
 	}
 }

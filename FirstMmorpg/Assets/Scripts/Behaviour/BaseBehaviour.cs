@@ -9,6 +9,8 @@ public class BaseBehaviour : BaseController
 	public Slider energySlider;
 	public Slider healthSlider;
 
+	GlobalSettings global;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -21,6 +23,7 @@ public class BaseBehaviour : BaseController
 
 	public void StartRoutines ()
 	{
+		global = GameObject.Find ("UserInterface").GetComponent<GlobalSettings> ();
 		Hitpoint = MaxHitpoint;
 		StartCoroutine (HitpointRegen ());
 		StartCoroutine (UpdateHealthBar ());
@@ -30,6 +33,7 @@ public class BaseBehaviour : BaseController
 
 	public void StartEnemyRoutines ()
 	{
+		global = GameObject.Find ("UserInterface").GetComponent<GlobalSettings> ();
 		Hitpoint = MaxHitpoint;
 		StartCoroutine (HitpointRegen ());
 		//StartCoroutine (UpdateHealthBar ());
@@ -122,11 +126,19 @@ public class BaseBehaviour : BaseController
 	}
 
 	[SerializeField]
-	protected float baseDamage = 1f;
+	protected float baseDamageMax = 1f;
 
-	public float BaseDamage {
-		set { baseDamage = value; }
-		get { return baseDamage; }
+	public float BaseDamageMax {
+		set { baseDamageMax = value; }
+		get { return baseDamageMax; }
+	}
+
+	[SerializeField]
+	protected float baseDamageMin = 1f;
+
+	public float BaseDamageMin {
+		set { baseDamageMin = value; }
+		get { return baseDamageMin; }
 	}
 
 	[SerializeField]
@@ -135,6 +147,14 @@ public class BaseBehaviour : BaseController
 	public int AttackRange {
 		set { attackRange = value; }
 		get { return attackRange; }
+	}
+
+	[SerializeField]
+	protected float critChance = 10f;
+
+	public float CritChance {
+		get { return critChance; }
+		set { critChance = value; }
 	}
 
 	[SerializeField]
@@ -191,16 +211,27 @@ public class BaseBehaviour : BaseController
 
 	protected float timerTwo;
 
-	public float TimerTwo {
+	public float TimerTwo {	
 		get { return timerTwo; }
 		set { timerTwo = value; }
 	}
 
-	public void ApplyDamage (float amount, GameObject attacker)
+	public void ApplyDamage (float minAmount, float maxAmount, float critChance, GameObject attacker, bool ability)
 	{
-
+		float amount = Random.Range (minAmount, maxAmount);
+		float crit = Random.Range (0, 100);
+		bool critted = false;
+		if (crit < critChance) {
+			amount *= 2f;
+			critted = true;
+		}
+		
 		Hitpoint -= amount;
 
+		/*
+		if (attacker.tag == "Player")
+			global.InitiateEnemyCombatText (amount, ability, critted);
+		*/
 		if (Hitpoint < 0) {
 			if (tag == "Player")
 				OnPlayerDeath (attacker);

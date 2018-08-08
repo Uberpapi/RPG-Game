@@ -69,6 +69,39 @@ public class UI : MonoBehaviour
 		set { target = value; }
 	}
 
+	protected PlayerBehaviour playerBehaviour;
+
+	public PlayerBehaviour PlayerBehaviour {
+		get { return playerBehaviour; }
+		set { playerBehaviour = value; }
+	}
+
+	protected EnemyBehaviour enemyBehaviour;
+
+	public EnemyBehaviour EnemyBehaviour {
+		get { return enemyBehaviour; }
+		set { enemyBehaviour = value; }
+	}
+}
+
+
+/*
+	public void FindBars ()
+	{
+		ActionBars = GameObject.Find ("ActionBars");
+		BarOne = GameObject.Find ("Bar1");
+		BarTwo = GameObject.Find ("Bar2");
+		BarThree = GameObject.Find ("Bar3");
+		BarFour = GameObject.Find ("Bar4");
+		BarFive = GameObject.Find ("Bar5");
+		BarSix = GameObject.Find ("Bar6");
+		BarSeven = GameObject.Find ("Bar7");
+		SettingsBar = GameObject.Find ("SettingsBar");
+	}
+	*/
+
+
+/*
 	protected GameObject barOne;
 
 	public GameObject BarOne {
@@ -124,37 +157,7 @@ public class UI : MonoBehaviour
 		get { return settingsBar; }
 		set { settingsBar = value; }
 	}
-
-	protected PlayerBehaviour playerBehaviour;
-
-	public PlayerBehaviour PlayerBehaviour {
-		get { return playerBehaviour; }
-		set { playerBehaviour = value; }
-	}
-
-	protected EnemyBehaviour enemyBehaviour;
-
-	public EnemyBehaviour EnemyBehaviour {
-		get { return enemyBehaviour; }
-		set { enemyBehaviour = value; }
-	}
-
-
-
-	public void FindBars ()
-	{
-		ActionBars = GameObject.Find ("ActionBars");
-		BarOne = GameObject.Find ("Bar1");
-		BarTwo = GameObject.Find ("Bar2");
-		BarThree = GameObject.Find ("Bar3");
-		BarFour = GameObject.Find ("Bar4");
-		BarFive = GameObject.Find ("Bar5");
-		BarSix = GameObject.Find ("Bar6");
-		BarSeven = GameObject.Find ("Bar7");
-		SettingsBar = GameObject.Find ("SettingsBar");
-	}
-}
-
+	*/
 
 
 

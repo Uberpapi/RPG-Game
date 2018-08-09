@@ -228,10 +228,10 @@ public class BaseBehaviour : BaseController
 		
 		Hitpoint -= amount;
 
-		/*
+
 		if (attacker.tag == "Player")
 			global.InitiateEnemyCombatText (amount, ability, critted);
-		*/
+		
 		if (Hitpoint < 0) {
 			if (tag == "Player")
 				OnPlayerDeath (attacker);

@@ -79,12 +79,23 @@ public class GlobalSettings : UI
 	{
 		GameObject combatText = Instantiate (enemyCombatTextPrefab) as GameObject;
 		RectTransform rectTransform = combatText.GetComponent<RectTransform> ();
+	
 		combatText.transform.SetParent (transform);
-		rectTransform.transform.localPosition = combatText.transform.position;
-		rectTransform.transform.localScale = combatText.transform.localScale;
+		rectTransform.transform.localPosition = enemyCombatTextPrefab.transform.localPosition;
+		rectTransform.transform.localScale = enemyCombatTextPrefab.transform.localScale;
 		rectTransform.transform.localRotation = combatText.transform.localRotation;
 		Text text = combatText.GetComponent<Text> ();
-		text.text = amount.ToString ();
+		if (crit) {
+			text.fontSize = (text.fontSize * 2);
+			combatText.GetComponent<Animator> ().SetTrigger ("Crit");
+			text.color = Color.yellow;
+		} else {
+			combatText.GetComponent<Animator> ().SetTrigger ("Damage");
+		}
+		if (ability)
+			text.color = Color.yellow;
+		text.text = ((int)(amount)).ToString ();
+		Destroy (combatText, 1f);
 	}
 
 }

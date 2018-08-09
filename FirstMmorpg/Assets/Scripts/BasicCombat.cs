@@ -76,19 +76,21 @@ public class BasicCombat : MonoBehaviour
 	public void AutoAttack ()
 	{
 		Auto = true;
-		if (PlayerBehaviour.AttackSpeed < autoAttackTimer && Range < PlayerBehaviour.AttackRange) {
-			if (FacingTarget ()) {
-				//int number = Random.Range (1, 3);
-				animator.SetTrigger ("strike1");
-				if (Targets.EnemyBehaviour != null) {
-					Targets.EnemyBehaviour.ApplyDamage (PlayerBehaviour.BaseDamageMin, PlayerBehaviour.BaseDamageMax, PlayerBehaviour.CritChance, gameObject, false);
+		if (tag == "Player") {
+			if (PlayerBehaviour.AttackSpeed < autoAttackTimer && Range < PlayerBehaviour.AttackRange) {
+				if (FacingTarget ()) {
+					//int number = Random.Range (1, 3);
+					animator.SetTrigger ("strike1");
+					if (Targets.EnemyBehaviour != null) {
+						Targets.EnemyBehaviour.ApplyDamage (PlayerBehaviour.BaseDamageMin, PlayerBehaviour.BaseDamageMax, PlayerBehaviour.CritChance, gameObject, false);
+					}
+					autoAttackTimer = 0f;
+				} else {
+					print ("Not facing Target");
+					// Sätt in print i Text animation i skärmen
 				}
-				autoAttackTimer = 0f;
-			} else {
-				print ("Not facing Target");
-				// Sätt in print i Text animation i skärmen
 			}
-		}
+		} 
 	}
 
 	public bool FacingTarget ()

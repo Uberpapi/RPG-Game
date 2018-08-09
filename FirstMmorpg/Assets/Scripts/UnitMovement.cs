@@ -24,9 +24,11 @@ public class UnitMovement : MonoBehaviour
     [SerializeField]
     private float agentStoppingDistance = 5;
     int layerMask = 1 << 9;
+    UnitSpawner unitSpawner;
 
     void Start()
     {
+        unitSpawner = transform.parent.GetComponent<UnitSpawner>();
         myAgent = GetComponent<NavMeshAgent>();
         if (myAgent == null)
         {
@@ -38,8 +40,9 @@ public class UnitMovement : MonoBehaviour
         myAgent.angularSpeed = agentAngularSpeed;
         myAgent.stoppingDistance = agentStoppingDistance;
         myAnimator = GetComponent<Animator>();
-        patrolDestination1 = new Vector3(transform.position.x + Random.Range(-20f, -5), transform.position.y, transform.position.z + Random.Range(-20f, -5));
-        patrolDestination2 = new Vector3(transform.position.x + Random.Range(5, 20f), transform.position.y, transform.position.z + Random.Range(5, 20f));
+
+        patrolDestination1 = new Vector3(transform.parent.transform.position.x + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance), transform.position.y, transform.parent.transform.position.z + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance));
+        patrolDestination2 = new Vector3(transform.parent.transform.position.x + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance), transform.position.y, transform.parent.transform.position.z + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance));
         StartCoroutine(UpdateMovement());
     }
 
@@ -62,6 +65,11 @@ public class UnitMovement : MonoBehaviour
     {
         while (true)
         {
+            if (!myAgent.isOnNavMesh)
+            {
+                Destroy(gameObject);
+                break;
+            }
 
             playersWithinRange = Physics.OverlapSphere(transform.position, aggroRange, layerMask);
 

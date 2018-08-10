@@ -36,43 +36,30 @@ public class UnitMovement : MonoBehaviour
             myAgent = GetComponent<NavMeshAgent>();
         }
         myAgent.speed = agentSpeed;
+        myAgent.radius = 0.01f;
         myAgent.acceleration = agentAcceleration;
         myAgent.angularSpeed = agentAngularSpeed;
         myAgent.stoppingDistance = agentStoppingDistance;
         myAnimator = GetComponent<Animator>();
+        if (!myAgent.isOnNavMesh)
+        {
+            print("Unit did not spawn on navmesh, destroying it");
+            Destroy(gameObject);
+        }
+        else
+        {
+            StartCoroutine(UpdateMovement());
+        }
 
-        patrolDestination1 = new Vector3(transform.parent.transform.position.x + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance), transform.position.y, transform.parent.transform.position.z + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance));
-        patrolDestination2 = new Vector3(transform.parent.transform.position.x + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance), transform.position.y, transform.parent.transform.position.z + Random.Range(-unitSpawner.maxDistance, +unitSpawner.maxDistance));
-        StartCoroutine(UpdateMovement());
     }
 
-    void GotoNextPoint()
-    {
-        myAnimator.SetBool("walk", true);
-        if (moveDirection == patrolDestination1 || moveDirection == Vector3.zero)
-        {
-            moveDirection = patrolDestination2;
-            myAgent.destination = moveDirection;
-        }
-        else if (moveDirection == patrolDestination2)
-        {
-            moveDirection = patrolDestination1;
-            myAgent.destination = moveDirection;
-        }
-    }
+
 
     IEnumerator UpdateMovement()
     {
         while (true)
         {
-            if (!myAgent.isOnNavMesh)
-            {
-                Destroy(gameObject);
-                break;
-            }
-
             playersWithinRange = Physics.OverlapSphere(transform.position, aggroRange, layerMask);
-
             if (playersWithinRange.Length != 0)
             {
                 if (aggroPosition == Vector3.zero)
@@ -99,7 +86,7 @@ public class UnitMovement : MonoBehaviour
                 myAgent.speed = 3.5f;
                 myAnimator.SetBool("walk", true);
                 myAnimator.SetBool("run", false);
-                GotoNextPoint();
+                myAgent.destination = unitSpawner.RandomPositionOnMesh();
             }
             else if (aggroPosition != Vector3.zero)
             {
@@ -117,7 +104,7 @@ public class UnitMovement : MonoBehaviour
                         myAgent.speed = 3.5f;
                         myAnimator.SetBool("walk", true);
                         myAnimator.SetBool("run", false);
-                        GotoNextPoint();
+                        myAgent.destination = unitSpawner.RandomPositionOnMesh();
                         break;
                     }
                 }

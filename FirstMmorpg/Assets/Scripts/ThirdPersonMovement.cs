@@ -121,10 +121,11 @@ public class ThirdPersonMovement : MonoBehaviour
             moveFB *= moveSpeed;
             runningForward = true;
         }
-        moveLR = Input.GetAxis("Horizontal") * (moveSpeed / 1.5f);
+
 
         if (turnPressed && !mouse1Pressed && !mouse2Pressed)
         {
+            turn += Input.GetAxis("Turn");
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, centerPoint.eulerAngles.y, 0f), Time.deltaTime * rotationSpeed / 2);
         }
         else if (turnPressed && mouse2Pressed)
@@ -134,7 +135,18 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else if (turnPressed && mouse1Pressed)
         {
+            turn += Input.GetAxis("Turn");
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, centerPoint.eulerAngles.y, 0f), Time.deltaTime * rotationSpeed / 2);
             //we should rotate the player here without rotating the camera, does not work atm
+        }
+        else if (!turnPressed && mouse2Pressed)
+        {
+            moveLR = Input.GetAxis("Horizontal") * (moveSpeed / 1.5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, centerPoint.eulerAngles.y, 0f), Time.deltaTime * rotationSpeed);
+        }
+        else
+        {
+            moveLR = Input.GetAxis("Horizontal") * (moveSpeed / 1.5f);
         }
 
         Vector3 movement = new Vector3(moveLR, vertVelocity, moveFB);
@@ -153,7 +165,6 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             mouseX += Input.GetAxis("Mouse X");
             mouseY -= Input.GetAxis("Mouse Y");
-
             centerPoint.localRotation = Quaternion.Euler(mouseY * cameraSpeed, (mouseX + turn) * cameraSpeed, 0);
         }
         else if (mouse1Pressed)
@@ -164,7 +175,6 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else
         {
-            turn += Input.GetAxis("Turn");
             centerPoint.localRotation = Quaternion.Euler(mouseY * cameraSpeed, (mouseX + turn) * cameraSpeed, 0);
         }
 

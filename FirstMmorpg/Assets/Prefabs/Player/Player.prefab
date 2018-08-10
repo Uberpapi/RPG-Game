@@ -2962,11 +2962,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1f44d9c84509644894c4cd9066959d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  energySlider: {fileID: 0}
+  healthSlider: {fileID: 0}
+  playerClass: 0
   hitpoint: 1000
   maxHitPoint: 1000
-  baseDamage: 15
-  attackRange: 1
+  mana: 10
+  maxMana: 100
+  energyReg: 10
+  energy: 100
+  maxEnergy: 100
+  baseDamageMax: 1
+  baseDamageMin: 1
+  attackRange: 3
+  critChance: 10
   attackSpeed: 0.5
+  offHandAttackSpeed: 1.5
   hpReg: 1
 --- !u!137 &137028869229304504
 SkinnedMeshRenderer:

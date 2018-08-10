@@ -3121,8 +3121,10 @@ MonoBehaviour:
   energyReg: 10
   energy: 100
   maxEnergy: 100
-  baseDamage: 12
-  attackRange: 1
+  baseDamageMax: 12
+  baseDamageMin: 7
+  attackRange: 3
+  critChance: 25
   attackSpeed: 0.5
   offHandAttackSpeed: 1.5
   hpReg: 0

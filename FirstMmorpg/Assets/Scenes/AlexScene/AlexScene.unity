@@ -3930,7 +3930,7 @@ Prefab:
     - target: {fileID: 114630084027661716, guid: f6f2c7de898e9cd4788b729f74d8dbfd,
         type: 2}
       propertyPath: attackRange
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114630084027661716, guid: f6f2c7de898e9cd4788b729f74d8dbfd,
         type: 2}

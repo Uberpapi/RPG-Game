@@ -97,7 +97,7 @@ public class GlobalSettings : UI
 			if (ability)
 				text.color = Color.yellow;
 			text.text = ((int)(amount)).ToString ();
-			Destroy (combatText, 2f);
+			Destroy (combatText, 1.2f);
 		} else {
 
 		}

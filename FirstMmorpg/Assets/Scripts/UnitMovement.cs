@@ -26,6 +26,13 @@ public class UnitMovement : MonoBehaviour
 	int layerMask = 1 << 9;
 	UnitSpawner unitSpawner;
 
+	protected GameObject target;
+
+	public GameObject Target {
+		get { return target; }
+		set { target = value; }
+	}
+
 	void Start ()
 	{
 		unitSpawner = transform.parent.GetComponent<UnitSpawner> ();
@@ -68,6 +75,7 @@ public class UnitMovement : MonoBehaviour
 					myAnimator.SetBool ("run", true);
 				}
 				myAgent.destination = playersWithinRange [0].transform.position;
+				Target = playersWithinRange [0].gameObject;
 			} else if (myAgent.remainingDistance < 5f && aggroPosition == Vector3.zero) {
 				myAgent.speed = 3.5f;
 				myAnimator.SetBool ("walk", true);

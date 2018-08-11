@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GlobalSettings : UI
 {
 	public GameObject enemyCombatTextPrefab;
+	public GameObject messagePrefab;
 
 	public Texture2D cursorTexture;
 	public CursorMode cursorMode = CursorMode.Auto;
@@ -27,7 +28,7 @@ public class GlobalSettings : UI
 	Button abilitySix;
 	Button abilitySeven;
 
-
+	bool messageActive = false;
 	Text fps;
 	float time;
 	int counter = 0;
@@ -36,6 +37,8 @@ public class GlobalSettings : UI
 	{
 		Cursor.SetCursor (cursorTexture, Vector2.zero, cursorMode);
 		fps = GameObject.Find ("FPSCounter").GetComponent<Text> ();
+		//messageText = message.GetComponent<Text> ();
+		//messageAnim = message.GetComponent<Animator> ();
 		UpdateButtons ();
 	}
 
@@ -75,27 +78,52 @@ public class GlobalSettings : UI
 	}
 
 
-	public void InitiateEnemyCombatText (float amount, bool ability, bool crit)
+	public void InitiateCombatText (float amount, bool ability, bool crit, bool outgoing)
 	{
-		GameObject combatText = Instantiate (enemyCombatTextPrefab) as GameObject;
-		RectTransform rectTransform = combatText.GetComponent<RectTransform> ();
-	
-		combatText.transform.SetParent (transform);
-		rectTransform.transform.localPosition = enemyCombatTextPrefab.transform.localPosition;
-		rectTransform.transform.localScale = enemyCombatTextPrefab.transform.localScale;
-		rectTransform.transform.localRotation = combatText.transform.localRotation;
-		Text text = combatText.GetComponent<Text> ();
-		if (crit) {
-			text.fontSize = (text.fontSize * 2);
-			combatText.GetComponent<Animator> ().SetTrigger ("Crit");
-			text.color = Color.yellow;
+		if (outgoing) {
+			GameObject combatText = Instantiate (enemyCombatTextPrefab) as GameObject;
+			//RectTransform rectTransform = combatText.GetComponent<RectTransform> ();
+			combatText.transform.SetParent (transform);
+			combatText.transform.localPosition = enemyCombatTextPrefab.transform.localPosition;
+			combatText.transform.localScale = enemyCombatTextPrefab.transform.localScale;
+			combatText.transform.localRotation = enemyCombatTextPrefab.transform.localRotation;
+			Text text = combatText.GetComponent<Text> ();
+			if (crit) {
+				text.fontSize = (text.fontSize * 2);
+				combatText.GetComponent<Animator> ().SetTrigger ("Crit");
+			} else {
+				combatText.GetComponent<Animator> ().SetTrigger ("Damage");
+			}
+			if (ability)
+				text.color = Color.yellow;
+			text.text = ((int)(amount)).ToString ();
+			Destroy (combatText, 2f);
 		} else {
-			combatText.GetComponent<Animator> ().SetTrigger ("Damage");
+
 		}
-		if (ability)
-			text.color = Color.yellow;
-		text.text = ((int)(amount)).ToString ();
-		Destroy (combatText, 1f);
+	}
+
+	public IEnumerator MessageText (string text)
+	{
+		if (!messageActive) {
+			messageActive = true;
+			GameObject message = Instantiate (messagePrefab) as GameObject;
+			message.transform.SetParent (transform);
+			RectTransform rectTransform = message.GetComponent<RectTransform> ();
+
+			message.transform.localPosition = messagePrefab.transform.localPosition;
+			message.transform.localScale = messagePrefab.transform.localScale;
+			message.transform.localRotation = messagePrefab.transform.localRotation;
+
+			Text messageText = message.GetComponent<Text> ();
+			messageText.text = text;
+			//message.GetComponent<Animator> ().SetTrigger ("Message");
+			yield return new WaitForSeconds (1f);
+			Destroy (message);
+			messageActive = false;
+		}
+
+
 	}
 
 }

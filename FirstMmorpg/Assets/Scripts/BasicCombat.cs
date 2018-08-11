@@ -10,6 +10,7 @@ public class BasicCombat : MonoBehaviour
 	CharacterController controller;
 	UI userInterface;
 	float autoAttackTimer;
+	GlobalSettings globalSettings;
 
 	//angle decides the minimum angle a target is considered to be infront of player/npc
 	int angle = 50;
@@ -19,6 +20,7 @@ public class BasicCombat : MonoBehaviour
 	{
 		userInterface = GameObject.Find ("UserInterface").GetComponent<UI> ();
 		Targets = userInterface.GetComponent<Targeting> ();
+		globalSettings = userInterface.GetComponent<GlobalSettings> ();
 		animator = GetComponent<Animator> ();
 		PlayerBehaviour = GetComponent <PlayerBehaviour> ();
 		controller = GetComponent<CharacterController> ();
@@ -86,6 +88,7 @@ public class BasicCombat : MonoBehaviour
 					}
 					autoAttackTimer = 0f;
 				} else {
+					StartCoroutine (globalSettings.MessageText ("Not facing target"));
 					print ("Not facing Target");
 					// Sätt in print i Text animation i skärmen
 				}

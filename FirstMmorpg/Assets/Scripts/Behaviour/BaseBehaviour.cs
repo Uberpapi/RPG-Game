@@ -230,7 +230,7 @@ public class BaseBehaviour : BaseController
 
 
 		if (attacker.tag == "Player")
-			global.InitiateEnemyCombatText (amount, ability, critted);
+			global.InitiateCombatText (amount, ability, critted, true);
 		
 		if (Hitpoint < 0) {
 			if (tag == "Player")

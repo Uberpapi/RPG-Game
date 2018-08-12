@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : BaseBehaviour
+public class NpcBehaviour : BaseBehaviour
 {
 
 	Animator anim;
+	private float range;
 	// Use this for initialization
 	void Start ()
 	{
@@ -41,13 +42,21 @@ public class EnemyBehaviour : BaseBehaviour
 	{
 
 		while (true) {
-			if (Movement.Target != null) {
-				anim.SetTrigger ("strike1");
+			if (Movement.Target != null && GetRange (Movement.Target.transform) < AttackRange) {
+				anim.SetTrigger ("strike1");	
 				yield return new WaitForSeconds (0.2f);
 				Movement.Target.GetComponent<PlayerBehaviour> ().ApplyDamage (BaseDamageMin, BaseDamageMax, CritChance, gameObject, false);
 				yield return new WaitForSeconds (AttackSpeed);
 			} else
 				yield return new WaitForSeconds (0.2f);
 		}
+	}
+
+	float GetRange (Transform target)
+	{
+		
+		Vector3 closestPoint = target.GetComponent<Collider> ().ClosestPointOnBounds (transform.position);
+		float distance = Vector3.Distance (closestPoint, transform.position);
+		return distance;
 	}
 }

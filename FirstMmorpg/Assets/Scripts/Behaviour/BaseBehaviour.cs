@@ -39,6 +39,7 @@ public class BaseBehaviour : BaseController
 		//StartCoroutine (UpdateHealthBar ());
 	}
 
+	[SerializeField]
 	protected int level = 1;
 
 	public int Level {
@@ -231,6 +232,8 @@ public class BaseBehaviour : BaseController
 
 		if (attacker.tag == "Player")
 			global.InitiateCombatText (amount, ability, critted, true);
+		else
+			global.InitiateCombatText (amount, false, critted, false);
 		
 		if (Hitpoint < 0) {
 			if (tag == "Player")
@@ -258,7 +261,7 @@ public class BaseBehaviour : BaseController
 
 	void OnNPCDeath (GameObject attacker)
 	{
-		attacker.GetComponent<PlayerBehaviour> ().UpdateExperince (GetComponent<EnemyBehaviour> ().Experience);
+		attacker.GetComponent<PlayerBehaviour> ().UpdateExperince (GetComponent<NpcBehaviour> ().Experience);
 		Destroy (gameObject);
 		print ("Killed it, high five!");
 	}

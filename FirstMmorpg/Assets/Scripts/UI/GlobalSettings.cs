@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class GlobalSettings : UI
 {
-	public GameObject enemyCombatTextPrefab;
+	public GameObject incommingDamageTextPrefab;
+	public GameObject outgoingDamageTextPrefab;
 	public GameObject messagePrefab;
 
 	public Texture2D cursorTexture;
@@ -19,6 +20,7 @@ public class GlobalSettings : UI
 	public GameObject barSix;
 	public GameObject barSeven;
 	public GameObject barGameObject;
+	GameObject textPanel;
 
 	Button abilityOne;
 	Button abilityTwo;
@@ -27,6 +29,8 @@ public class GlobalSettings : UI
 	Button abilityFive;
 	Button abilitySix;
 	Button abilitySeven;
+
+	Targeting targeting;
 
 	bool messageActive = false;
 	Text fps;
@@ -37,6 +41,8 @@ public class GlobalSettings : UI
 	{
 		Cursor.SetCursor (cursorTexture, Vector2.zero, cursorMode);
 		fps = GameObject.Find ("FPSCounter").GetComponent<Text> ();
+		textPanel = GameObject.Find ("TextPanel");
+		targeting = GetComponent<Targeting> ();
 		//messageText = message.GetComponent<Text> ();
 		//messageAnim = message.GetComponent<Animator> ();
 		UpdateButtons ();
@@ -73,6 +79,9 @@ public class GlobalSettings : UI
 		if (Input.GetButton ("One")) {
 			abilityOne.onClick.Invoke ();
 			abilityOne.Select ();
+			if (targeting.Target == null) {
+				StartCoroutine (MessageText ("You need a target", 1f));
+			}
 		}
 
 	}
@@ -81,12 +90,12 @@ public class GlobalSettings : UI
 	public void InitiateCombatText (float amount, bool ability, bool crit, bool outgoing)
 	{
 		if (outgoing) {
-			GameObject combatText = Instantiate (enemyCombatTextPrefab) as GameObject;
+			GameObject combatText = Instantiate (outgoingDamageTextPrefab) as GameObject;
 			//RectTransform rectTransform = combatText.GetComponent<RectTransform> ();
-			combatText.transform.SetParent (transform);
-			combatText.transform.localPosition = enemyCombatTextPrefab.transform.localPosition;
-			combatText.transform.localScale = enemyCombatTextPrefab.transform.localScale;
-			combatText.transform.localRotation = enemyCombatTextPrefab.transform.localRotation;
+			combatText.transform.SetParent (textPanel.transform);
+			combatText.transform.localPosition = outgoingDamageTextPrefab.transform.localPosition;
+			combatText.transform.localScale = outgoingDamageTextPrefab.transform.localScale;
+			combatText.transform.localRotation = outgoingDamageTextPrefab.transform.localRotation;	
 			Text text = combatText.GetComponent<Text> ();
 			if (crit) {
 				text.fontSize = (text.fontSize * 2);
@@ -99,16 +108,34 @@ public class GlobalSettings : UI
 			text.text = ((int)(amount)).ToString ();
 			Destroy (combatText, 1.2f);
 		} else {
+			
+			GameObject combatText = Instantiate (incommingDamageTextPrefab) as GameObject;
+			//RectTransform rectTransform = combatText.GetComponent<RectTransform> ();
+			combatText.transform.SetParent (textPanel.transform);
+			combatText.transform.localPosition = incommingDamageTextPrefab.transform.localPosition;
+			combatText.transform.localScale = incommingDamageTextPrefab.transform.localScale;
+			combatText.transform.localRotation = incommingDamageTextPrefab.transform.localRotation;	
+			Text text = combatText.GetComponent<Text> ();
+			if (crit) {
+				text.fontSize = (text.fontSize * 2);
+				combatText.GetComponent<Animator> ().SetTrigger ("Crit");
+			} else {
+				combatText.GetComponent<Animator> ().SetTrigger ("Damage");
+			}
+			if (ability)
+				text.color = Color.yellow;
+			text.text = ("-" + ((int)(amount)).ToString ());
+			Destroy (combatText, 1.2f);
 
 		}
 	}
 
-	public IEnumerator MessageText (string text)
+	public IEnumerator MessageText (string text, float duration)
 	{
 		if (!messageActive) {
 			messageActive = true;
 			GameObject message = Instantiate (messagePrefab) as GameObject;
-			message.transform.SetParent (transform);
+			message.transform.SetParent (textPanel.transform);
 			RectTransform rectTransform = message.GetComponent<RectTransform> ();
 
 			message.transform.localPosition = messagePrefab.transform.localPosition;
@@ -118,7 +145,7 @@ public class GlobalSettings : UI
 			Text messageText = message.GetComponent<Text> ();
 			messageText.text = text;
 			//message.GetComponent<Animator> ().SetTrigger ("Message");
-			yield return new WaitForSeconds (1f);
+			yield return new WaitForSeconds (duration);
 			Destroy (message);
 			messageActive = false;
 		}

@@ -1,9 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+	Text enemyLevel;
+	Text friendlyLevel;
+	Text enemyName;
+	Text friendlyName;
+
+	Text enemyHealthPercentage;
+	Text playerHealthPercentage;
+	Text friendlyHealthPercentage;
+
+	Sprite targetPortrait;
+	Sprite friendlyPortrait;
+
 
 	public void Initiate ()
 	{
@@ -11,8 +24,14 @@ public class UI : MonoBehaviour
 		FriendlyTargetFrame = GameObject.Find ("FriendlyFrame");
 		PlayerTargetFrame = GameObject.Find ("PlayerFrame");
 		Player = GameObject.Find ("Player");
+		PlayerBehaviour = Player.GetComponent<PlayerBehaviour> ();
 		ActionBars = GameObject.Find ("ActionBars");
-
+		enemyLevel = GameObject.Find ("EnemyLevel").GetComponent<Text> ();
+		friendlyLevel = GameObject.Find ("FriendlyLevel").GetComponent<Text> ();
+		targetPortrait = GameObject.Find ("EnemyTargetPortrait").GetComponent<Image> ().sprite;
+		friendlyPortrait = GameObject.Find ("FriendlyTargetPortrait").GetComponent<Image> ().sprite;
+		enemyName = GameObject.Find ("EnemyName").GetComponent<Text> ();
+		friendlyName = GameObject.Find ("FriendlyName").GetComponent<Text> ();
 		//FindBars ();
 
 		EnemyTargetFrame.SetActive (false);
@@ -76,11 +95,42 @@ public class UI : MonoBehaviour
 		set { playerBehaviour = value; }
 	}
 
-	protected EnemyBehaviour enemyBehaviour;
+	protected NpcBehaviour friendlyBehaviour;
 
-	public EnemyBehaviour EnemyBehaviour {
+	public NpcBehaviour FriendlyBehaviour {
+		get { return friendlyBehaviour; }
+		set { friendlyBehaviour = value; }
+	}
+
+	protected NpcBehaviour enemyBehaviour;
+
+	public NpcBehaviour EnemyBehaviour {
 		get { return enemyBehaviour; }
 		set { enemyBehaviour = value; }
+	}
+
+
+
+	public void UpdateTargetInfo (string targetType)
+	{
+		if (Target != null) {
+			if (targetType == "Enemy") {
+				EnemyBehaviour = Target.GetComponent<NpcBehaviour> ();
+				enemyLevel.text = EnemyBehaviour.Level.ToString ();
+				enemyName.text = Target.name;
+				// targetPortrait = hit.transform.GetComponent<Image> ().sprite;
+			} else if (targetType == "Friendly") {
+				FriendlyBehaviour = Target.GetComponent<NpcBehaviour> ();
+				friendlyLevel.text = FriendlyBehaviour.Level.ToString ();
+				friendlyName.text = Target.name;
+				//friendlyPortrait = hit.transform.GetComponent<Image> ().sprite;
+			} else {
+
+				friendlyLevel.text = PlayerBehaviour.Level.ToString ();
+				friendlyName.text = PlayerBehaviour.name;
+
+			}
+		}
 	}
 }
 
@@ -98,10 +148,7 @@ public class UI : MonoBehaviour
 		BarSeven = GameObject.Find ("Bar7");
 		SettingsBar = GameObject.Find ("SettingsBar");
 	}
-	*/
 
-
-/*
 	protected GameObject barOne;
 
 	public GameObject BarOne {

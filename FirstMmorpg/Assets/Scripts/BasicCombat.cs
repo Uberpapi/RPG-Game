@@ -38,7 +38,6 @@ public class BasicCombat : MonoBehaviour
 			}
 
 			if (Auto && Targets.EnemyBehaviour != null) {
-				print ("in here");
 				AutoAttack ();
 			}
 		} else {
@@ -82,9 +81,7 @@ public class BasicCombat : MonoBehaviour
 		if (tag == "Player") {
 			if (PlayerBehaviour.AttackRange > Range) {
 				if (PlayerBehaviour.AttackSpeed < autoAttackTimer && Range < PlayerBehaviour.AttackRange) {
-					print ("1");
 					if (FacingTarget ()) {
-						print ("2");
 						//int number = Random.Range (1, 3);
 						animator.SetTrigger ("strike1");
 						if (Targets.EnemyBehaviour != null) {
@@ -92,14 +89,13 @@ public class BasicCombat : MonoBehaviour
 						}
 						autoAttackTimer = 0f;
 					} else {
-						StartCoroutine (globalSettings.MessageText ("Not facing target"));
+						StartCoroutine (globalSettings.MessageText ("Not facing target", 1f));
 						print ("Not facing Target");
 						// Sätt in print i Text animation i skärmen
 					}
 				}
 			} else {
-				StartCoroutine (globalSettings.MessageText ("Target is out of range"));
-				print ("out of range");
+				StartCoroutine (globalSettings.MessageText ("Target is out of range", 1.5f));
 			}
 		}
 	}

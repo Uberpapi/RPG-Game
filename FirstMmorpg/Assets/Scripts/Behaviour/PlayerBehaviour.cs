@@ -11,6 +11,7 @@ public class PlayerBehaviour : BaseBehaviour
 	void Start ()
 	{
 		StartRoutines ();
+		UpdateLevel ();
 		expSlider.maxValue = ExpToNextLevel;
 		expSlider.value = Experience;
 	}
@@ -53,5 +54,12 @@ public class PlayerBehaviour : BaseBehaviour
 		} else {
 			expSlider.value = Experience;
 		}
+		UpdateLevel ();
+	}
+
+	public void UpdateLevel ()
+	{
+		Text playerLevel = GameObject.Find ("PlayerLevel").GetComponent<Text> ();
+		playerLevel.text = Level.ToString ();
 	}
 }

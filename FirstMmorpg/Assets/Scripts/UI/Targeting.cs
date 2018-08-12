@@ -12,10 +12,6 @@ public class Targeting : UI
 	public Slider targetFriendlyManaSlider;
 
 	BasicCombat playerCombat;
-	Sprite targetPortrait;
-	Sprite friendlyPortrait;
-	Text targetName;
-	Text friendlyName;
 	Collider playerCollider;
 
 	RaycastHit hit;
@@ -32,10 +28,7 @@ public class Targeting : UI
 	void Start ()
 	{
 		
-		targetPortrait = GameObject.Find ("EnemyTargetPortrait").GetComponent<Image> ().sprite;
-		friendlyPortrait = GameObject.Find ("FriendlyTargetPortrait").GetComponent<Image> ().sprite;
-		targetName = GameObject.Find ("EnemyName").GetComponent<Text> ();
-		friendlyName = GameObject.Find ("FriendlyName").GetComponent<Text> ();
+
 		MyCamera = playerCamera;
 		Initiate ();
 		StartCoroutine (UpdateRangeToTarget ());
@@ -55,24 +48,24 @@ public class Targeting : UI
 					Target = hit.transform.gameObject;
 					FriendlyTargetFrame.SetActive (false);
 					EnemyTargetFrame.SetActive (true);
-					EnemyBehaviour = hit.transform.GetComponent<EnemyBehaviour> ();
-					// targetPortrait = hit.transform.GetComponent<Image> ().sprite;
-					targetName.text = hit.transform.name;
+					UpdateTargetInfo ("Enemy");
 					StartCoroutine (UpdateEnemyHealthBar ());
 				} else if (hit.transform.tag == "Player" && hit.transform.gameObject != Player) {
+					
 					Target = hit.transform.gameObject;
 					EnemyTargetFrame.SetActive (false);
 					FriendlyTargetFrame.SetActive (true);
-					PlayerBehaviour = hit.transform.GetComponent<PlayerBehaviour> ();
-					//friendlyPortrait = hit.transform.GetComponent<Image> ().sprite;
-					friendlyName.text = hit.transform.name;
+					UpdateTargetInfo ("Enemy");
 					StartCoroutine (UpdateFriendlyHealthBar ());
+
 				} else if (UIHitOrNot ()) {
+					
 					Target = null;
 					EnemyTargetFrame.SetActive (false);
 					FriendlyTargetFrame.SetActive (false);
 					StopCoroutine (UpdateFriendlyHealthBar ());
 					StopCoroutine (UpdateEnemyHealthBar ());
+
 				}
 			}
 		}
@@ -88,7 +81,7 @@ public class Targeting : UI
 			return false;
 		} else if (RectTransformUtility.RectangleContainsScreenPoint (PlayerTargetFrame.GetComponent<RectTransform> (), Input.mousePosition, null)) {
 			Target = Player;
-			friendlyName.text = Player.name;
+			UpdateTargetInfo ("Player");
 			EnemyTargetFrame.SetActive (false);
 			FriendlyTargetFrame.SetActive (true);
 			return false;
@@ -127,7 +120,7 @@ public class Targeting : UI
 	IEnumerator UpdateEnemyHealthBar ()
 	{
 
-		while (true && EnemyBehaviour != null) {
+		while (EnemyBehaviour != null) {
 
 			targetEnemyHealthSlider.maxValue = EnemyBehaviour.MaxHitpoint;
 			targetEnemyHealthSlider.value = EnemyBehaviour.Hitpoint;
@@ -140,10 +133,10 @@ public class Targeting : UI
 	IEnumerator UpdateFriendlyHealthBar ()
 	{
 
-		while (true && PlayerBehaviour != null) {
+		while (FriendlyBehaviour != null) {
 
-			targetFriendlyHealthSlider.maxValue = PlayerBehaviour.MaxHitpoint;
-			targetFriendlyHealthSlider.value = PlayerBehaviour.Hitpoint;
+			targetFriendlyHealthSlider.maxValue = FriendlyBehaviour.MaxHitpoint;
+			targetFriendlyHealthSlider.value = FriendlyBehaviour.Hitpoint;
 
 			yield return new WaitForSeconds (0.2f);
 
@@ -161,7 +154,7 @@ public class Targeting : UI
 				StopCoroutine (UpdateEnemyHealthBar ());
 			}
 
-			yield return new WaitForSeconds (0.4f);
+			yield return new WaitForSeconds (0.25f);
 		}
 	}
 }
